@@ -1,68 +1,92 @@
+using System;
 using UnityEngine;
 
 public class TrafficLightControl : MonoBehaviour
 {
+    public float time;
+    
     private MeshRenderer[] _meshRenderers;
-    private float _time;
-
-    private const float SwitchToYellow = 5f;
-    private const float SwitchToGreen = 7f;
-    private const float SwitchToRed = 25f;
-
+    private string _trafficLightColor;
+    
     private void Awake()
     {
         _meshRenderers = GetComponentsInChildren<MeshRenderer>();
-        _time = 0f;
+    }
 
+    private void Start()
+    {
         // Changes color of child object to black
         foreach (var meshRenderer in _meshRenderers)
             meshRenderer.material.color = Color.black;
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        Timer(Time.deltaTime);
+        // Checks if player has entered trigger box
+        if (other.name != "Cartoon_SportCar_B01")
+            return;
+        
+        if (_trafficLightColor == "red")
+        {
+            print("Player ran a red light!");
+        }
     }
 
-    private void Timer(float deltaTime)
+    // Changes the color of traffic light
+    public void TrafficLightLoop()
     {
-        _time += deltaTime;
-        
-        if (_time < SwitchToYellow)
-            ChangeTrafficLight("red");
-        
-        if (_time is >= SwitchToYellow and < SwitchToGreen)
-            ChangeTrafficLight("yellow");
-        
-        if (_time is >= SwitchToGreen and < SwitchToRed)
-            ChangeTrafficLight("green"); 
-        
-        if (_time >= SwitchToRed)
-            _time = 0;
-    }
+        time += Time.deltaTime;
 
-    private void ChangeTrafficLightsToBlack()
-    {
-        foreach (var meshRenderer in _meshRenderers)
-            meshRenderer.material.color = Color.black;
+        if (time < 15f)
+            _trafficLightColor = "red";
+
+        if (time >= 15f && time < 28f)
+            _trafficLightColor = "green";
+
+        if (time >= 28f && time < 30f)
+            _trafficLightColor = "yellow";
+            
+        if (time >= 30f)
+            time = 0;
+        
+        ChangeTrafficLight(_trafficLightColor);
     }
     
     private void ChangeTrafficLight(string col)
     {
         switch (col)
         {
-            case "red":
-                ChangeTrafficLightsToBlack();
-                _meshRenderers[1].material.color = Color.red;
+            case "green":
+                TurnOffLights();
+                _meshRenderers[1].material.EnableKeyword("_EMISSION");
+                _meshRenderers[4].material.EnableKeyword("_EMISSION");
+                _meshRenderers[1].material.SetColor("_EmissionColor", Color.green);
+                _meshRenderers[4].material.SetColor("_EmissionColor", Color.green);
                 break;
             case "yellow":
-                ChangeTrafficLightsToBlack();
-                _meshRenderers[2].material.color = Color.yellow;
+                TurnOffLights();
+                _meshRenderers[2].material.EnableKeyword("_EMISSION");
+                _meshRenderers[5].material.EnableKeyword("_EMISSION");
+                _meshRenderers[2].material.SetColor("_EmissionColor", Color.yellow);
+                _meshRenderers[5].material.SetColor("_EmissionColor", Color.yellow);
                 break;
-            case "green":
-                ChangeTrafficLightsToBlack();
-                _meshRenderers[3].material.color = Color.green;
+            case "red":
+                TurnOffLights();
+                _meshRenderers[3].material.EnableKeyword("_EMISSION");
+                _meshRenderers[6].material.EnableKeyword("_EMISSION");
+                _meshRenderers[3].material.SetColor("_EmissionColor", Color.red);
+                _meshRenderers[6].material.SetColor("_EmissionColor", Color.red);
                 break;
+        }
+    }
+    
+    private void TurnOffLights()
+    {
+        foreach (var meshRenderer in _meshRenderers)
+        {
+            meshRenderer.material.DisableKeyword("_EMISSION");
+            meshRenderer.material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.EmissiveIsBlack;
+            meshRenderer.material.SetColor("_EmissionColor", Color.black);
         }
     }
 }

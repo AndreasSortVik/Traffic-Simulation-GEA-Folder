@@ -1,6 +1,4 @@
-using System.Numerics;
 using UnityEngine;
-using UnityEngine.Rendering.VirtualTexturing;
 using Vector3 = UnityEngine.Vector3;
 
 public class CarMovement : MonoBehaviour
@@ -15,15 +13,15 @@ public class CarMovement : MonoBehaviour
     [SerializeField] private AnimationCurve turnCurve; // Turn radius
     [SerializeField] private float turnSpeed;
     
-    // Player component
+    // Object component
     private Rigidbody _rb;
 
     // Vehicle movement
     [SerializeField] private float acceleration;
     [SerializeField] private float deceleration;
-    private float topSpeed;
     [SerializeField] private float forwardTopSpeed;
     [SerializeField] private float reverseTopSpeed;
+    private float _topSpeed;
     
     private void Awake()
     {
@@ -61,12 +59,12 @@ public class CarMovement : MonoBehaviour
         transform.transform.Rotate(Vector3.up, _turnInput * y * direction * Time.fixedDeltaTime * turnSpeed);
         
         // Changing the top speed depending on if car is driving forwards or reversing
-        topSpeed = forwardTopSpeed;
+        _topSpeed = forwardTopSpeed;
         if (!movingForward)
-            topSpeed = reverseTopSpeed;
+            _topSpeed = reverseTopSpeed;
         
         // Once the top speed is reached the vehicle cannot go faster
-        if (_rb.velocity.magnitude >= topSpeed && _driveInput > 0)
+        if (_rb.velocity.magnitude >= _topSpeed && _driveInput > 0)
             movement = Vector3.zero;
         
         // Accelerates or decelerates vehicle
@@ -75,7 +73,7 @@ public class CarMovement : MonoBehaviour
         HandleAsymetricFriction();
     }
 
-    // Makes Sure vehicle cannot go sideways
+    // Makes sure vehicle cannot go sideways
     private void HandleAsymetricFriction()
     {
         Vector3 v = Vector3.Project(_rb.velocity, transform.right);
