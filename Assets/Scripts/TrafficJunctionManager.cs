@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class TrafficJunctionManager : MonoBehaviour
@@ -11,8 +10,8 @@ public class TrafficJunctionManager : MonoBehaviour
 
         // Sets start time in traffic light loop for each traffic light in junction
         _trafficLightScripts[0].time = 0f;
-        _trafficLightScripts[2].time = 0;
         _trafficLightScripts[1].time = 15f;
+        _trafficLightScripts[2].time = 0;
         _trafficLightScripts[3].time = 15f;
     }
 

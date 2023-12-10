@@ -4,13 +4,22 @@ using UnityEngine;
 public class TrafficLightControl : MonoBehaviour
 {
     public float time;
+
+    [SerializeField] private AICarMovement[] AIScripts;
     
     private MeshRenderer[] _meshRenderers;
     private string _trafficLightColor;
+    private GameObject _otherObject;
     
     private void Awake()
     {
         _meshRenderers = GetComponentsInChildren<MeshRenderer>();
+        _otherObject = GameObject.Find("AI Cars");
+        
+        if (_otherObject != null)
+        {
+            AIScripts = _otherObject.GetComponentsInChildren<AICarMovement>();
+        }
     }
 
     private void Start()
@@ -29,6 +38,45 @@ public class TrafficLightControl : MonoBehaviour
         if (_trafficLightColor == "red")
         {
             print("Player ran a red light!");
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        // Checks if first AI car has entered trigger box
+        if (other.name == "AI Car")
+        {
+            print(other.name + " has entered trigger!");
+            
+            if (_trafficLightColor is "red" or "yellow")
+                AIScripts[0].PauseAnimation();
+            
+            if (_trafficLightColor == "green")
+                AIScripts[0].PlayAnimation();
+        }
+        
+        // Checks if second AI car has entered trigger box
+        if (other.name == "AI Car (1)")
+        {
+            print(other.name + " has entered trigger!");
+            
+            if (_trafficLightColor is "red" or "yellow")
+                AIScripts[1].PauseAnimation();
+            
+            if (_trafficLightColor == "green")
+                AIScripts[1].PlayAnimation();
+        }
+        
+        // Checks if third AI car has entered trigger box
+        if (other.name == "AI Car (2)")
+        {
+            print(other.name + " has entered trigger!");
+            
+            if (_trafficLightColor is "red" or "yellow")
+                AIScripts[2].PauseAnimation();
+            
+            if (_trafficLightColor == "green")
+                AIScripts[2].PlayAnimation();
         }
     }
 
