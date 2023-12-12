@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TreeEditor;
 using UnityEngine;
 
 // This script checks if any other cars are inside the two large trigger boxes whilst one of the AI cars are inside the small trigger box by the yield sign
@@ -46,11 +45,6 @@ public class ThreeWayJunctionManager : MonoBehaviour
         // If AI car is inside the yield trigger box
         if (yieldTriggerScript.triggered)
         {
-            //print("Yield trigger box is triggered at " + transform.position);
-            
-            //print("Large trigger 1: " + largeTriggerScripts[0].triggered);
-            //print("Large trigger 2: " + largeTriggerScripts[1].triggered);
-            
             if (largeTriggerScripts[0].triggered || largeTriggerScripts[1].triggered)
                 AIScripts[ReturnAIScriptIndex()].PauseAnimation();
             

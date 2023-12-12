@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class TriggerBoxCheck : MonoBehaviour
@@ -22,11 +21,6 @@ public class TriggerBoxCheck : MonoBehaviour
         // For the large trigger boxes that check if the road is clear
         if (CompareTag("LargeTrigger"))
         {
-            //print(other.name + " has triggered large trigger box");
-            
-            // if (!other.CompareTag("AI") || !other.CompareTag("Player"))
-            //     return;
-            
             if (other.CompareTag("AI") || other.CompareTag("Player"))
                 triggered = true;
         }
@@ -44,9 +38,6 @@ public class TriggerBoxCheck : MonoBehaviour
 
         if (CompareTag("LargeTrigger"))
         {
-            // if (!other.CompareTag("AI") || !other.CompareTag("Player"))
-            //     return;
-            
             if (other.CompareTag("AI") || other.CompareTag("Player"))
                 triggered = false;
         }

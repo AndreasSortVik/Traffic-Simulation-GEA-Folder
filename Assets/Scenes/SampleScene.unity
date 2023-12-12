@@ -4975,7 +4975,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -52.5, y: 50}
-  m_SizeDelta: {x: 105, y: 50}
+  m_SizeDelta: {x: 130, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &433692487
 MonoBehaviour:
@@ -4999,15 +4999,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Directions:
 
-    1. Left
+    1st. Left
 
-    2. Left
+    2nd. Left
 
-    3. Right
+    3rd. Right
 
-    4. Straigt
+    4th. Straigt
 
-    5.
+    5th.
     Park car'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
