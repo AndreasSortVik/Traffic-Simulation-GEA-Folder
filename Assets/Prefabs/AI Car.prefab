@@ -151,19 +151,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 3eed8165b861f444cbb8fe297fefedd7, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: AI
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 3eed8165b861f444cbb8fe297fefedd7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 444.3783
+      value: -353.12527
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 3eed8165b861f444cbb8fe297fefedd7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -178.09619
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 3eed8165b861f444cbb8fe297fefedd7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 161.6618
+      value: 28.192627
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 3eed8165b861f444cbb8fe297fefedd7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -193,7 +193,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: 3eed8165b861f444cbb8fe297fefedd7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 400004, guid: 3eed8165b861f444cbb8fe297fefedd7,
@@ -209,6 +210,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5500269063970224174}
+    - targetCorrespondingSourceObject: {fileID: 100004, guid: 3eed8165b861f444cbb8fe297fefedd7,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6839105473879496322}
     - targetCorrespondingSourceObject: {fileID: 100004, guid: 3eed8165b861f444cbb8fe297fefedd7,
         type: 3}
       insertIndex: -1
@@ -268,6 +273,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7058508, y: 1.4789697, z: 3.2435951}
   m_Center: {x: -0.00000035762787, y: 0.7355295, z: 0.13864899}
+--- !u!65 &6839105473879496322
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4433202093220405592}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.5, z: 3}
 --- !u!114 &3300941744020965056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,7 +311,7 @@ MonoBehaviour:
   m_LoopMode: 1
   m_Method: 1
   m_Duration: 1
-  m_MaxSpeed: 25
+  m_MaxSpeed: 20
   m_EasingMode: 0
   m_AlignmentMode: 1
   m_ObjectForwardAxis: 2

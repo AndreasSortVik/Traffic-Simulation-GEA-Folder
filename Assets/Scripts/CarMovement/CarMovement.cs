@@ -3,6 +3,9 @@ using Vector3 = UnityEngine.Vector3;
 
 public class CarMovement : MonoBehaviour
 {
+    // Scripts
+    private ManageScene manageSceneScript;
+    
     // Player input
     [SerializeField] private string driveInputName;
     [SerializeField] private string turnInputName;
@@ -22,15 +25,50 @@ public class CarMovement : MonoBehaviour
     [SerializeField] private float forwardTopSpeed;
     [SerializeField] private float reverseTopSpeed;
     private float _topSpeed;
+    private bool isGrounded;
     
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        
+        // Initialises scene object script
+        GameObject sceneObject = GameObject.Find("SceneManager");
+        if (sceneObject != null)
+            manageSceneScript = sceneObject.GetComponent<ManageScene>();
+    }
+
+    private void Update()
+    {
+        float maxGroundAngle = 90f;
+        
+        //Checks if car is touching the ground
+        if (Physics.Raycast(transform.position + Vector3.up * 0.05f, Vector3.down, out RaycastHit hit, 1f))
+        {
+            // Checks if car is upside-down
+            float groundAngle = Vector3.Angle(transform.up, hit.normal);
+            if (groundAngle >= maxGroundAngle)
+            {
+                isGrounded = false;
+                
+                // Resets scene if car is flipped
+                manageSceneScript.SetResetVariables(true, "You flipped you car.");
+            }
+            else // Car is not flipped, and is grounded
+            {
+                isGrounded = true;
+            }
+        }
+        else // Car is not on the ground
+        {
+            isGrounded = false;
+        }
     }
 
     private void FixedUpdate()
     {
-        VehicleMovement();
+        // If car is touching ground we can move it
+        if (isGrounded && !manageSceneScript.disablePlayerInput)
+            VehicleMovement();
     }
 
     private void VehicleMovement()
@@ -78,5 +116,24 @@ public class CarMovement : MonoBehaviour
     {
         Vector3 v = Vector3.Project(_rb.velocity, transform.right);
         _rb.AddForce(-v * 10f);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        // Checks if other is of tag AI
+        // This is done to make sure game does restart when player collides with AI car
+        if (other.collider.CompareTag("AI"))
+        {
+            manageSceneScript.SetResetVariables(true, "You crashed with another car.");
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Makes sure only triggers with road objects
+        if (other.CompareTag("Road") || other.CompareTag("Parked"))
+        {
+            manageSceneScript.SetResetVariables(true, "You crashed the car.");
+        }
     }
 }

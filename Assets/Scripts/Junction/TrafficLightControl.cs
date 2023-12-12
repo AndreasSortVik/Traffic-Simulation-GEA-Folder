@@ -1,25 +1,28 @@
-using System;
 using UnityEngine;
 
 public class TrafficLightControl : MonoBehaviour
 {
-    public float time;
+    [HideInInspector] public float time;
 
     [SerializeField] private AICarMovement[] AIScripts;
+    private ManageScene manageSceneScript;
     
     private MeshRenderer[] _meshRenderers;
     private string _trafficLightColor;
-    private GameObject _otherObject;
     
     private void Awake()
     {
+        // Initialises the children's mesh renderers
         _meshRenderers = GetComponentsInChildren<MeshRenderer>();
-        _otherObject = GameObject.Find("AI Cars");
         
-        if (_otherObject != null)
-        {
-            AIScripts = _otherObject.GetComponentsInChildren<AICarMovement>();
-        }
+        // Initialises scripts
+        GameObject otherObject = GameObject.Find("AI Cars");
+        if (otherObject != null)
+            AIScripts = otherObject.GetComponentsInChildren<AICarMovement>();
+        
+        otherObject = GameObject.Find("SceneManager");
+        if (otherObject != null)
+            manageSceneScript = otherObject.GetComponent<ManageScene>();
     }
 
     private void Start()
@@ -32,12 +35,13 @@ public class TrafficLightControl : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Checks if player has entered trigger box
-        if (other.name != "Cartoon_SportCar_B01")
+        if (!other.CompareTag("Player"))
             return;
         
+        // Checks if the traffic light is red, if so player has ran the red light
         if (_trafficLightColor == "red")
         {
-            print("Player ran a red light!");
+            manageSceneScript.SetResetVariables(true, "You ran a red light.");
         }
     }
 
@@ -46,8 +50,6 @@ public class TrafficLightControl : MonoBehaviour
         // Checks if first AI car has entered trigger box
         if (other.name == "AI Car")
         {
-            print(other.name + " has entered trigger!");
-            
             if (_trafficLightColor is "red" or "yellow")
                 AIScripts[0].PauseAnimation();
             
@@ -58,8 +60,6 @@ public class TrafficLightControl : MonoBehaviour
         // Checks if second AI car has entered trigger box
         if (other.name == "AI Car (1)")
         {
-            print(other.name + " has entered trigger!");
-            
             if (_trafficLightColor is "red" or "yellow")
                 AIScripts[1].PauseAnimation();
             
@@ -70,8 +70,6 @@ public class TrafficLightControl : MonoBehaviour
         // Checks if third AI car has entered trigger box
         if (other.name == "AI Car (2)")
         {
-            print(other.name + " has entered trigger!");
-            
             if (_trafficLightColor is "red" or "yellow")
                 AIScripts[2].PauseAnimation();
             
