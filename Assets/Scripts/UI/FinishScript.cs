@@ -11,7 +11,6 @@ public class FinishScript : MonoBehaviour
     
     public void OnClickQuit()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
 }
