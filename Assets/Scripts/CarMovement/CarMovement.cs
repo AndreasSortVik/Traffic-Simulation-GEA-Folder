@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
@@ -15,6 +16,10 @@ public class CarMovement : MonoBehaviour
     // Rotating vehicle
     [SerializeField] private AnimationCurve turnCurve; // Turn radius
     [SerializeField] private float turnSpeed;
+    
+    // Cameras
+    [SerializeField] private List<Camera> cameras;
+    private float cameraTime;
     
     // Object component
     private Rigidbody _rb;
@@ -35,6 +40,8 @@ public class CarMovement : MonoBehaviour
         GameObject sceneObject = GameObject.Find("SceneManager");
         if (sceneObject != null)
             manageSceneScript = sceneObject.GetComponent<ManageScene>();
+        
+        EnableCamera(0);
     }
 
     private void Update()
@@ -62,6 +69,12 @@ public class CarMovement : MonoBehaviour
         {
             isGrounded = false;
         }
+
+        // Changes camera depending on button press
+        // if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        //     EnableCamera(0);
+        // else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        //     EnableCamera(1);
     }
 
     private void FixedUpdate()
@@ -71,6 +84,17 @@ public class CarMovement : MonoBehaviour
             VehicleMovement();
     }
 
+    // Enables selected camera and disables the others
+    private void EnableCamera(int i)
+    {
+        foreach (var cam in cameras)
+        {
+            cam.enabled = false;
+        }
+
+        cameras[i].enabled = true;
+    }
+    
     private void VehicleMovement()
     {
         // Gets input values
@@ -98,11 +122,27 @@ public class CarMovement : MonoBehaviour
         
         // Changing the top speed depending on if car is driving forwards or reversing
         _topSpeed = forwardTopSpeed;
+        EnableCamera(0);
         if (!movingForward)
+        {
             _topSpeed = reverseTopSpeed;
-        
+            
+            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            {
+                cameraTime += Time.deltaTime;
+                
+                if (cameraTime >= 0.5f)
+                    EnableCamera(1);
+            }
+            else
+            {
+                cameraTime = 0;
+            }
+        }
+
         // Once the top speed is reached the vehicle cannot go faster
-        if (_rb.velocity.magnitude >= _topSpeed && _driveInput > 0)
+        //if (_rb.velocity.magnitude >= _topSpeed && _driveInput > 0)
+        if (_rb.velocity.magnitude >= _topSpeed)
             movement = Vector3.zero;
         
         // Accelerates or decelerates vehicle
